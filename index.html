@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蒋云鑫 | JIANG YUNXIN - AIGC & Visual Artist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;700;900&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #C1FF00;
+            --bg-dark: #0A0A0A;
+            --text-white: #FFFFFF;
+            --panel-bg: rgba(20, 20, 20, 0.8);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        .font-heading { font-family: 'Barlow Condensed', sans-serif; }
+        .font-impact { font-family: 'Archivo Black', sans-serif; }
+
+        /* 右侧高级感底图：模拟 UE5/数字孪生视觉 */
+        .hero-bg-container {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 60%;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(to right, var(--bg-dark) 0%, rgba(10,10,10,0.5) 20%, transparent 100%);
+        }
+
+        .hero-image {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: grayscale(1) contrast(1.2) brightness(0.6);
+            mask-image: linear-gradient(to left, black, transparent);
+            -webkit-mask-image: linear-gradient(to left, black, transparent);
+        }
+
+        /* 模拟参考图中的网格辅助线 */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(193, 255, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(193, 255, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* 侧边分割色块 */
+        .sidebar-accent {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 25%;
+            background: rgba(255,255,255,0.01);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            z-index: 1;
+        }
+
+        /* 巨大的标题字体控制 */
+        .giant-text {
+            font-size: clamp(4rem, 14vw, 11rem);
+            line-height: 0.82;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .text-neon { color: var(--neon-green); }
+        .bg-neon { background-color: var(--neon-green); }
+
+        /* 功能性 UI 元素 */
+        .badge {
+            background: var(--neon-green);
+            color: black;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 2px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .play-btn {
+            width: 70px; height: 70px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .play-btn:hover {
+            border-color: var(--neon-green);
+            transform: scale(1.1) rotate(90deg);
+            color: var(--neon-green);
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); }
+
+        /* 扫描线特效 */
+        .scanline {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            background: rgba(193, 255, 0, 0.03);
+            z-index: 100; pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan { from { top: 0; } to { top: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+
+    <!-- 顶部导航 -->
+    <nav class="fixed top-0 w-full z-50 px-12 py-10 flex justify-between items-center mix-blend-difference">
+        <div class="font-impact text-3xl tracking-tighter text-white">JY.XIN<span class="text-neon">_</span></div>
+        <div class="flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] items-center">
+            <span class="opacity-30 hidden md:block">DESIGNED BY JYXIN ©2026</span>
+            <a href="#projects" class="hover:text-neon transition-all">WORKS</a>
+            <a href="#about" class="hover:text-neon transition-all">PROFILE</a>
+            <div class="px-4 py-2 border border-white/20 hover:border-neon transition-colors cursor-pointer">
+                CONTACT
+            </div>
+        </div>
+    </nav>
+
+    <!-- 核心视觉区 (Hero Section) -->
+    <header class="relative min-h-screen flex items-center overflow-hidden">
+        <div class="sidebar-accent hidden md:block"></div>
+        
+        <!-- 这里是高级感的关键：右侧底图 -->
+        <div class="hero-bg-container">
+            <div class="grid-overlay"></div>
+            <!-- 底图建议：一张具有工业金属感或流体感的渲染图 -->
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000" class="hero-image" alt="Visual Background">
+        </div>
+        
+        <div class="container mx-auto px-12 relative z-10">
+            <div class="grid md:grid-cols-12">
+                <div class="md:col-span-9">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="badge">AIGC Designer</div>
+                        <div class="text-[10px] font-mono opacity-40 uppercase tracking-[0.2em]">UE5 / COMFYUI / VFX</div>
+                    </div>
+                    
+                    <h1 class="giant-text font-heading mb-8">
+                        <span class="text-neon">BEYOND</span><br>
+                        THE VISUAL<span class="opacity-20">.</span>
+                    </h1>
+                    
+                    <div class="flex flex-col md:flex-row items-start md:items-end gap-12 mt-16">
+                        <div class="max-w-md">
+                            <div class="w-12 h-1 bg-neon mb-6"></div>
+                            <p class="text-sm font-light leading-relaxed opacity-50 uppercase tracking-wider">
+                                致力于 AIGC 全流程制片与数字影像实验。
+                                <br>在吉比特雷霆游戏探索 AI 创意边界，
+                                <span class="text-white font-bold">以技术驱动重构视觉表达逻辑。</span>
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center gap-6 group cursor-pointer">
+                            <div class="play-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div class="font-heading text-xl font-bold italic leading-tight">
+                                PLAY<br><span class="text-neon">REEL.26</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部装饰数据 -->
+        <div class="absolute bottom-12 left-12 z-20 hidden md:flex flex-col gap-2">
+            <div class="text-[9px] font-mono opacity-20 uppercase tracking-[0.4em]">Rendering Status: Optimal</div>
+            <div class="text-[9px] font-mono opacity-20 uppercase tracking-[0.4em]">Location: 114.05, 22.54 (SZ)</div>
+        </div>
+    </header>
+
+    <!-- 作品区：注入简历真实项目 -->
+    <section id="projects" class="py-40 px-12 bg-[#050505]">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+            <div>
+                <h2 class="text-8xl font-heading font-black italic leading-none">WORKS<span class="text-neon">_</span></h2>
+                <p class="text-xs uppercase tracking-[0.5em] opacity-30 mt-4 italic">Index of selected productions</p>
+            </div>
+            <div class="text-right max-w-xs text-[11px] opacity-40 uppercase font-bold tracking-widest leading-loose">
+                从“中国好创意”全国一等奖到吉比特雷霆游戏 AI 实战案例。
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- 项目 01 -->
+            <div class="group cursor-pointer">
+                <div class="relative h-[500px] overflow-hidden border border-white/5">
+                    <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=1000" class="w-100 h-100 object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" alt="Project 01">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute top-6 right-6">
+                        <div class="px-3 py-1 bg-neon text-black text-[10px] font-black italic">AIGC / 1ST PRIZE</div>
+                    </div>
+                    <div class="absolute bottom-10 left-10">
+                        <h3 class="text-4xl font-heading font-black mb-2 italic">可控核聚变 · 锦江论坛</h3>
+                        <p class="text-xs opacity-50 uppercase tracking-widest">AIGC 暖场视频全流程主策划</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 项目 02 -->
+            <div class="group cursor-pointer md:mt-24">
+                <div class="relative h-[500px] overflow-hidden border border-white/5">
+                    <img src="https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1000" class="w-100 h-100 object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" alt="Project 02">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-10 left-10">
+                        <h3 class="text-4xl font-heading font-black mb-2 italic">G-BITS 广告内容流</h3>
+                        <p class="text-xs opacity-50 uppercase tracking-widest">AI 视频买量广告创意与产出</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技术与荣誉 -->
+    <section id="about" class="py-40 bg-white text-black">
+        <div class="container mx-auto px-12">
+            <div class="grid md:grid-cols-2 gap-24">
+                <div>
+                    <h2 class="text-6xl font-heading font-black mb-16 italic">SKILLS<span class="text-zinc-300">/</span>SET</h2>
+                    <div class="space-y-12">
+                        <div class="border-b-2 border-black/5 pb-8 group cursor-default">
+                            <div class="flex justify-between items-baseline mb-4">
+                                <span class="text-2xl font-black italic uppercase">AIGC Pipeline</span>
+                                <span class="font-mono text-sm">95%</span>
+                            </div>
+                            <p class="text-xs opacity-60 leading-relaxed uppercase tracking-widest">ComfyUI / SD / Keling / Stable Diffusion / 工作流搭建</p>
+                        </div>
+                        <div class="border-b-2 border-black/5 pb-8 group cursor-default">
+                            <div class="flex justify-between items-baseline mb-4">
+                                <span class="text-2xl font-black italic uppercase">UE5 / VFX</span>
+                                <span class="font-mono text-sm">88%</span>
+                            </div>
+                            <p class="text-xs opacity-60 leading-relaxed uppercase tracking-widest">Niagara 特效 / Lumen 渲染 / 虚拟制片 / 资产适配</p>
+                        </div>
+                        <div class="border-b-2 border-black/5 pb-8 group cursor-default">
+                            <div class="flex justify-between items-baseline mb-4">
+                                <span class="text-2xl font-black italic uppercase">3D Simulation</span>
+                                <span class="font-mono text-sm">85%</span>
+                            </div>
+                            <p class="text-xs opacity-60 leading-relaxed uppercase tracking-widest">Maya nCloth / C4D / 物理模拟解算 / 模型优化</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-6xl font-heading font-black mb-16 italic">HONORS<span class="text-zinc-300">/</span></h2>
+                        <ul class="space-y-6">
+                            <li class="flex justify-between text-sm font-bold border-b border-black/5 pb-4">
+                                <span>中国好创意艺术设计大赛</span>
+                                <span class="text-neon bg-black px-2">全国一等奖</span>
+                            </li>
+                            <li class="flex justify-between text-sm font-bold border-b border-black/5 pb-4">
+                                <span>米兰设计周高校展</span>
+                                <span class="opacity-50 italic">全国二等奖</span>
+                            </li>
+                            <li class="flex justify-between text-sm font-bold border-b border-black/5 pb-4">
+                                <span>未来设计师全国艺术大赛</span>
+                                <span class="opacity-50 italic">全国三等奖</span>
+                            </li>
+                            <li class="flex justify-between text-sm font-bold border-b border-black/5 pb-4">
+                                <span>香港数字艺术大赛</span>
+                                <span class="opacity-50 italic">三等奖</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-20 p-8 bg-zinc-100">
+                        <div class="text-[10px] font-black uppercase tracking-widest mb-4 opacity-40">Education</div>
+                        <div class="text-xl font-black uppercase italic">成都理工大学工程技术学院</div>
+                        <div class="text-sm opacity-60 mt-1">数字媒体艺术 · 本科 (2022-2026)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚：联系方式 -->
+    <footer class="bg-black py-40 px-12 border-t-[20px] border-neon">
+        <div class="grid md:grid-cols-2 gap-20">
+            <div>
+                <h2 class="text-8xl font-heading font-black leading-none mb-12">GET IN<br><span class="text-neon">TOUCH.</span></h2>
+                <div class="space-y-4">
+                    <p class="text-3xl font-light hover:text-neon transition-colors cursor-pointer">XIAOMM69@QQ.COM</p>
+                    <p class="text-xl opacity-40 font-mono tracking-tighter">+86 173 1165 7958</p>
+                </div>
+            </div>
+            <div class="flex flex-col justify-end items-end gap-10">
+                <div class="flex gap-8">
+                    <a href="#" class="text-xs font-black border-b-2 border-white/10 pb-1 hover:border-neon">ZHIHU</a>
+                    <a href="#" class="text-xs font-black border-b-2 border-white/10 pb-1 hover:border-neon">BEHANCE</a>
+                    <a href="#" class="text-xs font-black border-b-2 border-white/10 pb-1 hover:border-neon">RED</a>
+                </div>
+                <div class="text-right text-[10px] font-mono opacity-20 uppercase tracking-[0.5em] leading-relaxed">
+                    Designed for visual impact<br>
+                    Coded for performance<br>
+                    © 2026 JIANG YUNXIN
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 视差背景效果：根据鼠标位置轻微偏移底图
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            const heroImage = document.querySelector('.hero-image');
+            if(heroImage) {
+                heroImage.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
